@@ -47,23 +47,21 @@ public void display(){
     }
 
     public void processAddPizza(){
-        typePizzaDisplay();
-
         System.out.println("Write the type of crust you would like:\n");
         String userInput = scanner.nextLine();
-
-        switch(userInput){
-            case 1 -> processAddPizza();
-
-        }
+        crustPizzaDisplay();
 
 
 
     }
 
-    public void typePizzaDisplay(){
+    public void crustPizzaDisplay(){
         System.out.println("===Pizza Crust===\n -thin\n -regular\n -thick\n -cauliflower");
+        String userInput = scanner.nextLine();
+        userInput.
     }
+
+
 
 
 
