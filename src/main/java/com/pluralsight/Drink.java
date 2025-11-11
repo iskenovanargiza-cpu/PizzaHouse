@@ -1,7 +1,5 @@
 package com.pluralsight;
 
-import java.util.List;
-
 public class Drink {
     private String size;
     private String flavor;

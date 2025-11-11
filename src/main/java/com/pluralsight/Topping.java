@@ -8,25 +8,27 @@ public class Topping {
     private boolean isExtra;
     private HashMap<String, Double> extraPrices;
 
-    public Topping(String name, String category, boolean isPremium, boolean isExtra, HashMap<String, Double> extraPrices) {
+    public Topping(String name, String category, boolean isPremium, boolean isExtra) {
         this.name = name;
         this.category = category;
         this.isPremium = isPremium;
         this.isExtra = isExtra;
-        this.extraPrices = new HashMap<>();
-    }
 
-    public HashMap<String, Double> meatExtra() {
-        extraPrices.put("Personal", 0.50);
-        extraPrices.put("Medium", 1.00);
-        extraPrices.put("Large", 1.50);
-        return extraPrices;
-    }
-    public HashMap<String, Double> cheeseExtra() {
-        extraPrices.put("Personal", 0.30);
-        extraPrices.put("Medium", 0.60);
-        extraPrices.put("Large", 0.90);
-        return extraPrices;
+        if (category.equalsIgnoreCase("Meat")) {
+            extraPrices.put("Personal", 0.50);
+            extraPrices.put("Medium", 1.00);
+            extraPrices.put("Large", 1.50);
+        } else if (category.equalsIgnoreCase("Cheese")) {
+            extraPrices.put("Personal", 0.30);
+            extraPrices.put("Medium", 0.60);
+            extraPrices.put("Large", 0.90);
+        } else {
+            extraPrices.put("Personal", 0.00);
+            extraPrices.put("Medium", 0.00);
+            extraPrices.put("Large", 0.00);
+        }
+
+
     }
 
     public String getName() {

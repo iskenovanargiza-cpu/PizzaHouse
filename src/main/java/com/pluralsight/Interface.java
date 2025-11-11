@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class Interface {
     Scanner scanner = new Scanner(System.in);
+    Order order = new Order();
 
     public Interface(){
         System.out.println("!Program starts here!");
@@ -47,19 +48,26 @@ public void display(){
     }
 
     public void processAddPizza(){
+        crustTypeScreen();
         System.out.println("Write the type of crust you would like:\n");
-        String userInput = scanner.nextLine();
-        crustPizzaDisplay();
+        String crustType = scanner.nextLine();
+        sizeScreen();
+        System.out.println("Choose the size");
+
+
 
 
 
     }
 
-    public void crustPizzaDisplay(){
+    public void crustTypeScreen(){
         System.out.println("===Pizza Crust===\n -thin\n -regular\n -thick\n -cauliflower");
-        String userInput = scanner.nextLine();
-        userInput.
     }
+
+    public void sizeScreen() {
+        System.out.println("===Pizza Type===\n 1 - Personal 8\n2 - Medium 12\n3 - Large 16");
+    }
+
 
 
 
