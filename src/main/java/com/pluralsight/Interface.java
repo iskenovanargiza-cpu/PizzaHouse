@@ -57,7 +57,7 @@ public class Interface {
 
         switch (userInput) {
             case 1 -> processAddPizza();
-//            case 2 -> processAddDrink();
+            case 2 -> processAddDrink();
 //            case 3 -> processAddGarlicKnots();
             case 4 -> processCheckout();
 //            case 0 -> processCancelOrder;
@@ -65,6 +65,38 @@ public class Interface {
                 System.out.println("Invalid number. Returning to the home page screen...");
             }
         }
+    }
+
+    public void processAddDrink(){
+        String selectedDrink = "";
+        System.out.println("===Please select drink===\n1)Pepsi\n2)Sprite\n3)Bottle Water");
+        int inputDrink = scanner.nextInt();
+        scanner.nextLine();
+        if(inputDrink == 1) {
+            selectedDrink = "Pepsi";
+        } else if (inputDrink == 2) {
+            selectedDrink = "Sprite";
+        } else if (inputDrink == 3) {
+            selectedDrink = "Bottle Water";
+        }
+
+        String selectedDrinkSize = "";
+        System.out.println("===Please select size===\n1)Small\n2)Medium\n3)Large");
+        int inputDrinkSize = scanner.nextInt();
+        scanner.nextLine();
+        if (inputDrinkSize == 1) {
+            selectedDrinkSize = "Small";
+        } else if (inputDrinkSize == 2) {
+            selectedDrinkSize = "Medium";
+        } else if (inputDrinkSize == 3) {
+            selectedDrinkSize = "Large";
+        }
+
+
+
+
+
+
     }
 
     public void processAddPizza() {
@@ -77,8 +109,8 @@ public class Interface {
         isPremium = setPremiumCategory(selectedToppingCategory);
         String selectedToppingName = selectTopping();
         isExtra = addExtraTopping(selectedToppingName);
-        isStuffed = addStuffed();
         String selectedSauceName = selectSauce();
+        isStuffed = addStuffed();
         Topping topping = new Topping(selectedToppingCategory, selectedToppingName, isPremium, isExtra);
         Pizza pizza = new Pizza(selectedSize, selectedType, topping, selectedSauceName, isStuffed);
         order.addPizza(pizza);
@@ -90,6 +122,7 @@ public class Interface {
         String selectedType = "";
         System.out.println("===Please select pizza crust===\n1)Thin\n2)Regular\n3)Thick\n4)Cauliflower");
         int inputCrustChoice = scanner.nextInt();
+        scanner.nextLine();
         if (inputCrustChoice == 1) {
             selectedType = "Thin";
         } else if (inputCrustChoice == 2) {
@@ -106,6 +139,7 @@ public class Interface {
         String selectedSize = "";
         System.out.println("===Please select pizza size===\n1)Personal 8'\n2)Medium 12'\n3)Large 16'");
         int inputSize = scanner.nextInt();
+        scanner.nextLine();
         if (inputSize == 1) {
             selectedSize = "Personal";
         } else if (inputSize == 2) {
@@ -173,19 +207,19 @@ public class Interface {
         boolean isStuffed = false;
         System.out.print("Would you like the pizza with stuffed crust? 1)yes / 2)no:");
         int inputIfStuffedPizza = scanner.nextInt();
+        scanner.nextLine();
 
         if (inputIfStuffedPizza == 1) {
             isStuffed = true;
         }
         return isStuffed;
     }
-
     private boolean setPremiumCategory(String selectedToppingCategory) {
         return selectedToppingCategory.equals("premium");
 
     }
 
-    public void processCheckout() {
+    private void processCheckout() {
         System.out.println("Would you like to checkout? 1)yes / 2)no");
         int inputCheckout = scanner.nextInt();
         scanner.nextLine();
@@ -199,6 +233,7 @@ public class Interface {
                 for (Pizza firstPizza : order.getPizzas()) {
                     System.out.println(firstPizza.getSize());
                     System.out.println(firstPizza.getCrustType());
+                    System.out.println(firstPizza.getPizzaSauces());
                     System.out.println(firstPizza.isStuffed());
                     for (Topping topping1 : firstPizza.getToppings()) {
                         System.out.println(topping1.getName());

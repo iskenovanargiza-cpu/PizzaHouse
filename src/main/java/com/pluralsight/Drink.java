@@ -11,6 +11,18 @@ public class Drink {
         this.price = price;
     }
 
+    public double calculateDrink(String size) {
+        if (size.equals("Small")) {
+            return 2.00;
+        } else if (size.equals("Medium")) {
+            return 2.50;
+        } else if (size.equals("Large")) {
+            return 3.00;
+        }
+
+        return 0;
+    }
+
     public String getSize() {
         return size;
     }
