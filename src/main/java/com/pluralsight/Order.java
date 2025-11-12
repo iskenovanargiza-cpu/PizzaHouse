@@ -33,8 +33,6 @@ public class Order {
 
     public void addGarlicKnots(int garlicKnots){
 
-
-
     }
 
     public void calculateTotal() {
@@ -45,4 +43,7 @@ public class Order {
 
     }
 
+    public List<Pizza> getPizzas() {
+        return pizzas;
+    }
 }
