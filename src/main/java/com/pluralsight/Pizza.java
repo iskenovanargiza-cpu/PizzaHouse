@@ -7,15 +7,21 @@ public class Pizza {
     private String size;
     private String crustType;
     private Topping topping;
+    private String sauce;
     boolean isStuffed;
     private List <Topping> toppings;
+    private List<String> pizzaSauces;
 
-    public Pizza(String size, String crustType, Topping topping, boolean isStuffed) {
+
+    public Pizza(String size, String crustType, Topping topping,String sauce, boolean isStuffed) {
         this.size = size;
         this.crustType = crustType;
         this.topping = topping;
+        this.sauce = sauce;
         this.isStuffed = isStuffed;
         this.toppings = new ArrayList<>();
+        this.pizzaSauces = new ArrayList<>();
+
     }
 
     public double totalAmount() {
@@ -70,15 +76,19 @@ public class Pizza {
 
     }
 
-    public List <Topping> getTopping() {
-        return toppings;
-
-    }
-
     public boolean isStuffed() {
         return isStuffed;
 
     }
+
+    public List<Topping> getToppings() {
+        return toppings;
+
+    }
+    public List<String> getPizzaSauces() {
+        return pizzaSauces;
+    }
+
 
 }
 
