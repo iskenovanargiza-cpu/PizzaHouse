@@ -1,5 +1,4 @@
 package com.pluralsight;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -62,6 +61,10 @@ public class Interface {
         }
     }
 
+    public void processCheckout() {
+
+    }
+
     public void processAddPizza() {
         boolean isPremium;
         boolean isExtra;
@@ -76,23 +79,48 @@ public class Interface {
         Topping topping = new Topping(selectedToppingCategory, selectedToppingName, isPremium, isExtra);
         Pizza pizza = new Pizza(selectedSize, selectedType, topping, isStuffed);
         order.addPizza(pizza);
+        pizza.getTopping().add(topping);
 
-        //checkout
+
+        //checkout - display the order details (order-get pizzaz list-get element-
         System.out.println("Would you like to checkout? 1)yes / 2)no");
         int inputCheckout = scanner.nextInt();
+        scanner.nextLine();
+        if(inputCheckout == 1){
+
+        System.out.println("===CHECKOUT===\nOrder Summary:"); // +  I want to add date and time);
+        System.out.println("-----------------------------------------------");
+
         if(inputCheckout == 1) {
-            System.out.println(order
-                    .getPizzas()
-                    .get(0)
-                    .getTopping()
-                    .getCategory());
-            System.out.println(order.getPizzas().get(0).getTopping().getName());
+
+            for (Pizza firstPizza : order.getPizzas()) {
+                System.out.println(firstPizza.getSize());
+                System.out.println(firstPizza.getCrustType());
+                System.out.println(firstPizza.isStuffed());
+                for(Topping topping1 : firstPizza.getTopping()){
+                    System.out.println(topping1.getName());
+                    System.out.println(topping1.getCategory());
+                    System.out.println(topping1.isExtra());
+                    System.out.println();
+                    System.out.println(pizza.totalAmount());
+
+                }
+
+            }
+
+//
+//            System.out.println(order
+//                    .getPizzas()
+//                    .get(0)
+//                    .getTopping()
+//                    .getCategory());
+//            System.out.println(order.getPizzas().get(0).getTopping().getName());
         }
-    }
+    }}
 
     private String selectAndSetCrustType() {
         String selectedType = "";
-        System.out.println("===Please select pizza crust===\n 1)Thin\n2)Regular\n3)Thick\n4)Cauliflower");
+        System.out.println("===Please select pizza crust===\n1)Thin\n2)Regular\n3)Thick\n4)Cauliflower");
         int inputCrustChoice = scanner.nextInt();
         if (inputCrustChoice == 1) {
             selectedType = "Thin";
@@ -108,7 +136,7 @@ public class Interface {
 
     private String selectSize() {
         String selectedSize = "";
-        System.out.println("===Please select pizza Size===\n1)Personal 8\n2)Medium 12\n3) Large 16");
+        System.out.println("===Please select pizza size===\n1)Personal 8'\n2)Medium 12'\n3)Large 16'");
         int inputSize = scanner.nextInt();
         if (inputSize == 1) {
             selectedSize = "Personal";
@@ -124,6 +152,7 @@ public class Interface {
         String selectedToppingCategory = "";
         System.out.println("===Please select topping category===\n1)Regular Toppings\n2)Premium Toppings(extra cost)");
         int inputToppingCategory = scanner.nextInt();
+        scanner.nextLine();
 
         if (inputToppingCategory == 1) {
             toppings = regularToppings;
@@ -139,6 +168,7 @@ public class Interface {
         String selectedToppingName = "";
         for (int i = 0; i < toppings.size(); i++) {
             System.out.println((i + 1) + ") " + toppings.get(i));
+
         }
         int inputTopping = scanner.nextInt();
         selectedToppingName = toppings.get(inputTopping - 1);
@@ -147,7 +177,7 @@ public class Interface {
 
     private boolean addExtraTopping(String selectedToppingName) {
         boolean isExtra = false;
-        System.out.print("Would you like to add extra " + selectedToppingName + " ? 1)yes  /2)no):");
+        System.out.print("Would you like to add extra " + selectedToppingName + " ? 1)yes / 2)no:");
         int extraChoice = scanner.nextInt();
         if (extraChoice == 1) {
             isExtra = true;
@@ -157,7 +187,7 @@ public class Interface {
 
     private boolean addStuffed() {
         boolean isStuffed = false;
-        System.out.print("Would you like the pizza with stuffed crust? 1)yes  /2)no)");
+        System.out.print("Would you like the pizza with stuffed crust? 1)yes / 2)no:");
         int inputIfStuffedPizza = scanner.nextInt();
 
         if (inputIfStuffedPizza == 1) {
@@ -165,8 +195,9 @@ public class Interface {
         }
         return isStuffed;
     }
-
     private boolean setPremiumCategory(String selectedToppingCategory) {
         return selectedToppingCategory.equals("premium");
     }
+
+
 }
