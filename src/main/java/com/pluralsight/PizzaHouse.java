@@ -14,13 +14,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class PizzaHouse {
     Scanner scanner = new Scanner(System.in);
     AddPizza addPizza = new AddPizza(scanner);
+    AddDrink addDrink = new AddDrink(scanner);
     Order order = new Order();
 
     public void display() {
@@ -34,9 +33,7 @@ public class PizzaHouse {
             switch (userInput) {
                 case 1 -> orderScreen();
                 case 0 -> System.exit(0);
-                default -> {
-                    System.out.println("Invalid number. Please try again...");
-                }
+                default -> System.out.println("Invalid number. Please try again...");
             }
         } while (true);
     }
@@ -56,9 +53,7 @@ public class PizzaHouse {
             case 3 -> processAddGarlicKnots();
             case 4 -> processCheckout();
             case 0 -> processCancelOrder();
-            default -> {
-                System.out.println("Invalid number. Returning to the home page screen...");
-            }
+            default -> System.out.println("Invalid number. Returning to the home page screen...");
         }
     }
 
@@ -81,11 +76,11 @@ public class PizzaHouse {
     }
 
     public void processAddDrink() {
-        String selectedDrink = selectDrinkFlavor();
-        String selectedDrinkSize = selectDrinkSize();
-        Drink drink = new Drink(selectedDrink, selectedDrinkSize);
+        String selectedDrinkSize = addDrink.selectDrinkSize();
+        String selectedDrink = addDrink.selectDrinkFlavor();
+        Drink drink = new Drink(selectedDrinkSize, selectedDrink);
         order.addDrink(drink);
-        drink.calculateDrink(selectedDrinkSize);
+        processCheckout();
     }
 
     public void processAddGarlicKnots() {
@@ -151,7 +146,7 @@ public class PizzaHouse {
         }
     }
 
-    private void printReceipt(){
+    private void printReceipt() {
         System.out.println("===CHECKOUT===\nOrder summary:\ndate:" + LocalDate.now() + " " + LocalTime.now());
         System.out.println("-----------------------------------------------");
         double totalPriceForPizzas = 0;
@@ -172,7 +167,13 @@ public class PizzaHouse {
             }
         }
 
-        System.out.println("Total amount :" + " " + order.getPizzas().get(0).totalAmount(order.getPizzas().get(0)));
+        if (!order.getDrinks().isEmpty()) {
+            System.out.println("Drinks");
+            for (Drink drink : order.getDrinks()) {
+                System.out.println("-" + drink.getSize() + " " + drink.getFlavor() + ": $" + drink.getPizzaSizePricesMap().get(drink.getSize()));
+                totalPriceForDrinks = totalPriceForDrinks + drink.getPizzaSizePricesMap().get(drink.getSize());
+            }
+        }
     }
 
     public void processCancelOrder() {
@@ -183,7 +184,7 @@ public class PizzaHouse {
 
     public void clearAll() {
         order.getPizzas().clear();
-        drinks.clear();
+        order.getDrinks().clear();
         order.setGarlicKnots(0);
     }
 

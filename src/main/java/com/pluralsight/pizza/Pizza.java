@@ -9,7 +9,7 @@ public class Pizza {
     private String crustType;
     private Topping topping;
     private String sauce;
-    boolean isStuffed;
+    private boolean stuffed;
     private List<Topping> toppings;
     private double priceForExtraMeatTopping = 0.50;
     private double priceForExtraCheeseTopping = 0.30;
@@ -31,7 +31,7 @@ public class Pizza {
         this.crustType = crustType;
         this.topping = topping;
         this.sauce = sauce;
-        this.isStuffed = isStuffed;
+        this.stuffed = isStuffed;
         this.toppings = new ArrayList<>();
     }
 
@@ -85,8 +85,7 @@ public class Pizza {
     }
 
     public boolean isStuffed() {
-        return isStuffed;
-
+        return stuffed;
     }
 
     public List<Topping> getToppings() {
