@@ -1,4 +1,7 @@
 package com.pluralsight;
+import com.pluralsight.drink.Drink;
+import com.pluralsight.pizza.Pizza;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -45,6 +48,10 @@ public class Order {
 
     public List<Pizza> getPizzas() {
         return pizzas;
+    }
+
+    public List<Drink> getDrinks() {
+        return drinks;
     }
 
 

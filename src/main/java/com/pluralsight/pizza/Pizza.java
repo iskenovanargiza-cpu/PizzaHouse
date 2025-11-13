@@ -1,4 +1,4 @@
-package com.pluralsight;
+package com.pluralsight.pizza;
 
 import java.util.ArrayList;
 import java.util.HashMap;

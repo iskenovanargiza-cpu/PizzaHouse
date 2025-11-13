@@ -1,5 +1,11 @@
 package com.pluralsight;
 
+import com.pluralsight.drink.AddDrink;
+import com.pluralsight.drink.Drink;
+import com.pluralsight.pizza.AddPizza;
+import com.pluralsight.pizza.Pizza;
+import com.pluralsight.pizza.Topping;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,12 +22,6 @@ public class PizzaHouse {
     Scanner scanner = new Scanner(System.in);
     AddPizza addPizza = new AddPizza(scanner);
     Order order = new Order();
-
-    List<String> drinkFlavors = List.of(
-            "Coke", "Sprite", "Fanta", "Water", "Iced Tea"
-    );
-
-    List<String> drinks = new ArrayList<>();
 
     public void display() {
         do {
@@ -111,33 +111,6 @@ public class PizzaHouse {
 
     }
 
-    private String selectDrinkFlavor() {
-        String selectedDrink = "";
-        System.out.println("===Please select drink===");
-        drinks = drinkFlavors;
-        for (int i = 0; i < drinks.size(); i++) {
-            System.out.println((i + 1) + ")" + drinks.get(i));
-        }
-        int inputDrink = scanner.nextInt();
-        scanner.nextLine();
-        selectedDrink = drinks.get(inputDrink - 1);
-        return selectedDrink;
-    }
-
-    private String selectDrinkSize() {
-        String selectedDrinkSize = "";
-        System.out.println("===Please select size===\n1)Small\n2)Medium\n3)Large");
-        int inputDrinkSize = scanner.nextInt();
-        scanner.nextLine();
-        if (inputDrinkSize == 1) {
-            selectedDrinkSize = "Small";
-        } else if (inputDrinkSize == 2) {
-            selectedDrinkSize = "Medium";
-        } else if (inputDrinkSize == 3) {
-            selectedDrinkSize = "Large";
-        }
-        return selectedDrinkSize;
-    }
 
     private void processCheckout() {
         System.out.println("Would you like to checkout? 1)yes / 2)no");
@@ -181,15 +154,22 @@ public class PizzaHouse {
     private void printReceipt(){
         System.out.println("===CHECKOUT===\nOrder summary:\ndate:" + LocalDate.now() + " " + LocalTime.now());
         System.out.println("-----------------------------------------------");
+        double totalPriceForPizzas = 0;
+        double totalPriceForDrinks = 0;
 
-        for (Pizza firstPizza : order.getPizzas()) {
-            firstPizza.totalAmount(firstPizza);
-            System.out.println("Size: " + firstPizza.getSize());
-            System.out.println("Crust type: " + firstPizza.getCrustType());
-            System.out.println("Sauce: " + firstPizza.getSauce());
-            System.out.println("Stuffed crust: " + (firstPizza.isStuffed ? "yes" : "no"));
-            System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " \"" + firstPizza.getTopping().getName() + "\"");
-            System.out.println("Added extra " + firstPizza.getTopping().getName() + " : " + (firstPizza.getTopping().isExtra() ? "yes" : "no"));
+        if (!order.getPizzas().isEmpty()) {
+            System.out.println("Pizza");
+
+            for (Pizza pizza : order.getPizzas()) {
+                System.out.println("Size: " + pizza.getSize());
+                System.out.println("Crust type: " + pizza.getCrustType());
+                System.out.println("Sauce: " + pizza.getSauce());
+                System.out.println("Stuffed crust: " + (pizza.isStuffed() ? "yes" : "no"));
+                System.out.println("Topping: " + pizza.getTopping().getCategory() + " \"" + pizza.getTopping().getName() + "\"");
+                System.out.println("Added extra " + pizza.getTopping().getName() + " : " + (pizza.getTopping().isExtra() ? "yes" : "no"));
+                System.out.println("Subtotal: $" + pizza.totalAmount(pizza));
+                totalPriceForPizzas = totalPriceForPizzas + pizza.totalAmount(pizza);
+            }
         }
 
         System.out.println("Total amount :" + " " + order.getPizzas().get(0).totalAmount(order.getPizzas().get(0)));

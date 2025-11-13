@@ -1,8 +1,4 @@
-package com.pluralsight;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+package com.pluralsight.pizza;
 
 public class Topping {
     private String name, category;
