@@ -1,6 +1,14 @@
 package com.pluralsight;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -94,7 +102,6 @@ public class Interface {
         Pizza pizza = new Pizza(selectedSize, selectedType, topping, selectedSauceName, isStuffed);
         order.addPizza(pizza);
         processCheckout();
-
     }
 
     public void processAddDrink() {
@@ -105,7 +112,7 @@ public class Interface {
         drink.calculateDrink(selectedDrinkSize);
     }
 
-    public void processAddGarlicKnots(){
+    public void processAddGarlicKnots() {
         System.out.println("Add garlic knots to your order ? 1)yes / 2)no");
         int inputAddKnots = scanner.nextInt();
 
@@ -116,10 +123,10 @@ public class Interface {
         } else if (inputAddKnots == 2) {
             System.out.println("Would you like to process checkout? 1)yes / 2)no");
             int inputCheckout = scanner.nextInt();
-            if (inputCheckout == 1){
+            if (inputCheckout == 1) {
                 processCheckout();
 
-            }else if (inputCheckout == 2) {
+            } else if (inputCheckout == 2) {
                 System.out.println("You are directed to the main menu...");
                 orderScreen();
             }
@@ -229,6 +236,7 @@ public class Interface {
         }
         return isStuffed;
     }
+
     private boolean setPremiumCategory(String selectedToppingCategory) {
         return selectedToppingCategory.equals("premium");
 
@@ -269,37 +277,53 @@ public class Interface {
             if (!order.isValidOrder()) {
                 System.out.println("You are directed to main menu");
                 orderScreen();
-            }else if (order.isValidOrder()) {
-            System.out.println("===CHECKOUT===\nOrder summary:\ndate:" + LocalDate.now() + " " + LocalTime.now());
-            System.out.println("-----------------------------------------------");
-
-                for (Pizza firstPizza : order.getPizzas()) {
-                    firstPizza.totalAmount(firstPizza);
-                    System.out.println("Size: " + firstPizza.getSize());
-                    System.out.println("Crust type: " + firstPizza.getCrustType());
-                    System.out.println("Sauce: " + firstPizza.getSauce());
-                    System.out.println("Stuffed crust: " + (firstPizza.isStuffed ? "yes" : "no"));
-                    System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " \"" + firstPizza.getTopping().getName() + "\"");
-                    System.out.println("Added extra " + firstPizza.getTopping().getName() + " : " + (firstPizza.getTopping().isExtra() ? "yes" : "no"));
-                }
-
-            }
-            System.out.println("Total amount :" + " " + order.getPizzas().get(0).totalAmount(order.getPizzas().get(0)));
-
-
-
-            //confirm or cancel
-            System.out.println("1) Confirm / 2) Cancel");
-            int inputConfirm = scanner.nextInt();
-            if (inputConfirm == 1) {
-                //proceed to save receipt and then return to Home screen with a fresh order.
-
-
-
-            } else if (inputConfirm == 2) {
-                processCancelOrder();
+            } else {
+                printReceipt();
+                confirmOrCancelOrder();
             }
         }
+    }
+
+    private void confirmOrCancelOrder() {
+        System.out.println("1) Confirm / 2) Cancel");
+        int inputConfirm = scanner.nextInt();
+        if (inputConfirm == 1) {
+            try {
+                String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+                Path dir = Paths.get("src/main/resources/receipts");
+                Path filePath = dir.resolve(date + "-" + time);
+
+                try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+                    writer.write(String.format("%s|%n", "Pizza"));
+                    for (Pizza actualPizza : order.getPizzas()) {
+                        String extraTopping = "extra " + actualPizza.getTopping().getName();
+                        writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } else if (inputConfirm == 2) {
+            processCancelOrder();
+        }
+    }
+
+    private void printReceipt(){
+        System.out.println("===CHECKOUT===\nOrder summary:\ndate:" + LocalDate.now() + " " + LocalTime.now());
+        System.out.println("-----------------------------------------------");
+
+        for (Pizza firstPizza : order.getPizzas()) {
+            firstPizza.totalAmount(firstPizza);
+            System.out.println("Size: " + firstPizza.getSize());
+            System.out.println("Crust type: " + firstPizza.getCrustType());
+            System.out.println("Sauce: " + firstPizza.getSauce());
+            System.out.println("Stuffed crust: " + (firstPizza.isStuffed ? "yes" : "no"));
+            System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " \"" + firstPizza.getTopping().getName() + "\"");
+            System.out.println("Added extra " + firstPizza.getTopping().getName() + " : " + (firstPizza.getTopping().isExtra() ? "yes" : "no"));
+        }
+
+        System.out.println("Total amount :" + " " + order.getPizzas().get(0).totalAmount(order.getPizzas().get(0)));
     }
 
     public void processCancelOrder() {

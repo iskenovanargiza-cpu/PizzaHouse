@@ -54,11 +54,12 @@ public class Order {
     }
 
     public boolean isValidOrder() {
-        if(pizzas.isEmpty() && drinks.isEmpty() && garlicKnots == 0) {
+        if (!pizzas.isEmpty() || !drinks.isEmpty() || garlicKnots > 0) {
+            return true;
+        } else {
             System.out.println("You must order at least one pizza, drink, or garlic knots");
             return false;
         }
-        return true;
     }
 
     public void setGarlicKnots(int garlicKnots) {
