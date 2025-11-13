@@ -72,7 +72,7 @@ public class PizzaHouse {
         Topping topping = new Topping(selectedToppingCategory, selectedToppingName, isPremium, isExtra);
         Pizza pizza = new Pizza(selectedSize, selectedType, topping, selectedSauceName, isStuffed);
         order.addPizza(pizza);
-        processCheckout();
+        addAnotherProduct();
     }
 
     public void processAddDrink() {
@@ -80,7 +80,7 @@ public class PizzaHouse {
         String selectedDrink = addDrink.selectDrinkFlavor();
         Drink drink = new Drink(selectedDrinkSize, selectedDrink);
         order.addDrink(drink);
-        processCheckout();
+        addAnotherProduct();
     }
 
     public void processAddGarlicKnots() {
@@ -103,21 +103,27 @@ public class PizzaHouse {
             }
 
         }
-
     }
 
+    private void addAnotherProduct() {
+        System.out.println("Would you like to add another item? 1)yes | 2)checkout | 3) cancel order");
+        int userInput = scanner.nextInt();
+        if (userInput == 1) {
+            orderScreen();
+        } else if (userInput == 2) {
+            processCheckout();
+        } else if (userInput == 3) {
+            processCancelOrder();
+        }
+    }
 
     private void processCheckout() {
-        System.out.println("Would you like to checkout? 1)yes / 2)no");
-        int inputCheckout = scanner.nextInt();
-        if (inputCheckout == 1) {
-            if (!order.isValidOrder()) {
-                System.out.println("You are directed to main menu");
-                orderScreen();
-            } else {
-                printReceipt();
-                confirmOrCancelOrder();
-            }
+        if (!order.isValidOrder()) {
+            System.out.println("You are directed to main menu");
+            orderScreen();
+        } else {
+            printReceipt();
+            confirmOrCancelOrder();
         }
     }
 
@@ -132,17 +138,25 @@ public class PizzaHouse {
                 Path filePath = dir.resolve(date + "-" + time);
 
                 try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-                    writer.write(String.format("%s|%n", "Pizza"));
-                    for (Pizza actualPizza : order.getPizzas()) {
-                        String extraTopping = "extra " + actualPizza.getTopping().getName();
-                        writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
+                    if (!order.getPizzas().isEmpty()) {
+                        writer.write(String.format("%s|%n", "Pizzas"));
+                        for (Pizza actualPizza : order.getPizzas()) {
+                            String extraTopping = "extra " + actualPizza.getTopping().getName();
+                            writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
+                        }
+                        writer.write(String.format("%s:%s|", "Subtotal ", order.getTotalPricePizzas()));
+                    }
+                    if (!order.getDrinks().isEmpty()) {
+                        writer.write(String.format("%s|%n", "Drinks"));
+                        for (Drink actualDrink : order.getDrinks()) {
+                            writer.write(String.format("%s|%s%n", actualDrink.getSize(), actualDrink.getFlavor()));
+                        }
+                        writer.write(String.format("%s:%s", "Subtotal", order.getTotalPriceDrinks()));
                     }
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-        } else if (inputConfirm == 2) {
-            processCancelOrder();
         }
     }
 
@@ -165,6 +179,7 @@ public class PizzaHouse {
                 System.out.println("Subtotal: $" + pizza.totalAmount(pizza));
                 totalPriceForPizzas = totalPriceForPizzas + pizza.totalAmount(pizza);
             }
+            order.setTotalPricePizzas(totalPriceForPizzas);
         }
 
         if (!order.getDrinks().isEmpty()) {
@@ -173,6 +188,7 @@ public class PizzaHouse {
                 System.out.println("-" + drink.getSize() + " " + drink.getFlavor() + ": $" + drink.getPizzaSizePricesMap().get(drink.getSize()));
                 totalPriceForDrinks = totalPriceForDrinks + drink.getPizzaSizePricesMap().get(drink.getSize());
             }
+            order.setTotalPriceDrinks(totalPriceForDrinks);
         }
     }
 

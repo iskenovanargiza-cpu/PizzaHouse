@@ -14,6 +14,8 @@ public class Order {
     private List <Drink> drinks;
     private int garlicKnots;
     private double totalPrice;
+    private double totalPricePizzas;
+    private double totalPriceDrinks;
     private String receiptFileName;
 
     public Order() {
@@ -71,5 +73,21 @@ public class Order {
 
     public void setGarlicKnots(int garlicKnots) {
         this.garlicKnots = garlicKnots;
+    }
+
+    public double getTotalPricePizzas() {
+        return totalPricePizzas;
+    }
+
+    public double getTotalPriceDrinks() {
+        return totalPriceDrinks;
+    }
+
+    public void setTotalPricePizzas(double totalPricePizzas) {
+        this.totalPricePizzas = totalPricePizzas;
+    }
+
+    public void setTotalPriceDrinks(double totalPriceDrinks) {
+        this.totalPriceDrinks = totalPriceDrinks;
     }
 }
