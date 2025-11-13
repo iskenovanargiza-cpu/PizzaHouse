@@ -21,7 +21,7 @@ public class Interface {
     );
 
     List<String> sauces = List.of(
-            "Marinara", "Alfredo", "Pesto", "Bbq", "Buffalo", "Olive oil"
+            "Marinara", "Alfredo", "Pesto", "BBQ", "Buffalo", "Olive oil"
     );
 
     List<String> drinkFlavors = List.of(
@@ -174,7 +174,7 @@ public class Interface {
                 selectedToppingCategory = "premiumMeat";
             } else if (inputPremiumSelect == 2) {
                 toppings = premiumCheeseToppings;
-                selectedToppingCategory = "premiumCheese";
+                selectedToppingCategory = "Premium cheese category";
             }
         }
         return selectedToppingCategory;
@@ -278,7 +278,7 @@ public class Interface {
                     firstPizza.totalAmount(firstPizza);
                     System.out.println("Size: " + firstPizza.getSize());
                     System.out.println("Crust type: " + firstPizza.getCrustType());
-                    System.out.println("Sauce:" + firstPizza.getPizzaSauces());
+                    System.out.println("Sauce: " + firstPizza.getSauce());
                     System.out.println("Stuffed crust: " + (firstPizza.isStuffed ? "yes" : "no"));
                     System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " category " + firstPizza.getTopping().getName());
                     System.out.println("Added extra " + firstPizza.getTopping().getName() + " : " + (firstPizza.getTopping().isExtra() ? "yes" : "no"));
