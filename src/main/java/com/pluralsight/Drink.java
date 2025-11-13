@@ -1,14 +1,19 @@
 package com.pluralsight;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Drink {
     private String size;
     private String flavor;
     private double price;
+    private List<Drink> drinkFlavors;
 
-    public Drink(String size, String flavor, double price) {
+    public Drink(String size, String flavor) {
         this.size = size;
         this.flavor = flavor;
-        this.price = price;
+        this.price = calculateDrink(size);
+        this.drinkFlavors = new ArrayList<>();
     }
 
     public double calculateDrink(String size) {
@@ -33,6 +38,10 @@ public class Drink {
 
     public double getPrice() {
         return price;
+    }
+
+    public List<Drink> getDrinkFlavors() {
+        return drinkFlavors;
     }
 }
 

@@ -31,8 +31,8 @@ public class Order {
         this.drinks.add(drink);
     }
 
-    public void addGarlicKnots(int garlicKnots){
-
+    public double addGarlicKnots(int garlicKnots){
+       return garlicKnots * 1.50;
     }
 
     public void calculateTotal() {
@@ -45,5 +45,17 @@ public class Order {
 
     public List<Pizza> getPizzas() {
         return pizzas;
+    }
+
+    public int getGarlicKnots() {
+        return garlicKnots;
+    }
+
+    public boolean isValidOrder() {
+        if(pizzas.isEmpty() && drinks.isEmpty() && garlicKnots == 0) {
+            System.out.println("You must order at least one pizza, drink, or garlic knots");
+            return false;
+        }
+        return true;
     }
 }

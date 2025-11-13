@@ -1,4 +1,6 @@
 package com.pluralsight;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,6 +8,7 @@ import java.util.Scanner;
 public class Interface {
     Scanner scanner = new Scanner(System.in);
     Order order = new Order();
+
 
     List<String> regularToppings = List.of(
             "Onions", "Mushrooms", "Bell Peppers", "Olives",
@@ -21,8 +24,13 @@ public class Interface {
             "marinara", "alfredo", "pesto", "bbq", "buffalo", "olive oil"
     );
 
+    List<String> drinkFlavors = List.of(
+            "Coke", "Sprite", "Fanta", "Water", "Iced Tea"
+    );
+
     List<String> toppings = new ArrayList<>();
     List<String> pizzaSauces = new ArrayList<>();
+    List<String> drinks = new ArrayList<>();
 
     public Interface() {
         System.out.println("!Program starts here!");
@@ -58,45 +66,13 @@ public class Interface {
         switch (userInput) {
             case 1 -> processAddPizza();
             case 2 -> processAddDrink();
-//            case 3 -> processAddGarlicKnots();
+            case 3 -> processAddGarlicKnots();
             case 4 -> processCheckout();
 //            case 0 -> processCancelOrder;
             default -> {
                 System.out.println("Invalid number. Returning to the home page screen...");
             }
         }
-    }
-
-    public void processAddDrink(){
-        String selectedDrink = "";
-        System.out.println("===Please select drink===\n1)Pepsi\n2)Sprite\n3)Bottle Water");
-        int inputDrink = scanner.nextInt();
-        scanner.nextLine();
-        if(inputDrink == 1) {
-            selectedDrink = "Pepsi";
-        } else if (inputDrink == 2) {
-            selectedDrink = "Sprite";
-        } else if (inputDrink == 3) {
-            selectedDrink = "Bottle Water";
-        }
-
-        String selectedDrinkSize = "";
-        System.out.println("===Please select size===\n1)Small\n2)Medium\n3)Large");
-        int inputDrinkSize = scanner.nextInt();
-        scanner.nextLine();
-        if (inputDrinkSize == 1) {
-            selectedDrinkSize = "Small";
-        } else if (inputDrinkSize == 2) {
-            selectedDrinkSize = "Medium";
-        } else if (inputDrinkSize == 3) {
-            selectedDrinkSize = "Large";
-        }
-
-
-
-
-
-
     }
 
     public void processAddPizza() {
@@ -115,6 +91,37 @@ public class Interface {
         Pizza pizza = new Pizza(selectedSize, selectedType, topping, selectedSauceName, isStuffed);
         order.addPizza(pizza);
         pizza.getToppings().add(topping);
+
+    }
+
+    public void processAddDrink() {
+        String selectedDrink = selectDrinkFlavor();
+        String selectedDrinkSize = selectDrinkSize();
+        Drink drink = new Drink(selectedDrink, selectedDrinkSize);
+        order.addDrink(drink);
+        drink.calculateDrink(selectedDrinkSize);
+    }
+
+    public void processAddGarlicKnots(){
+        System.out.println("Add garlic knots to your order ? 1)yes / 2)no");
+        int inputAddKnots = scanner.nextInt();
+
+        if (inputAddKnots == 1) {
+            System.out.println("How many would you like to add?");
+            int inputQuantity = scanner.nextInt();
+            order.addGarlicKnots(inputQuantity);
+        } else if (inputAddKnots == 2) {
+            System.out.println("Would you like to process checkout? 1)yes / 2)no");
+            int inputCheckout = scanner.nextInt();
+            if (inputCheckout == 1){
+                processCheckout();
+
+            }else if (inputCheckout == 2) {
+                System.out.println("You are directed to the main menu...");
+                orderScreen();
+            }
+
+        }
 
     }
 
@@ -164,6 +171,7 @@ public class Interface {
             selectedToppingCategory = "premium";
         }
         return selectedToppingCategory;
+
     }
 
     private String selectTopping() {
@@ -191,7 +199,7 @@ public class Interface {
 
     private String selectSauce() {
         String selectedSauceName = "";
-        System.out.println("===Please select sauce===\n");
+        System.out.println("===Please select sauce===");
         pizzaSauces = sauces;
         for (int i = 0; i < pizzaSauces.size(); i++) {
             System.out.println(i + 1 + ")" + pizzaSauces.get(i));
@@ -219,13 +227,44 @@ public class Interface {
 
     }
 
+    private String selectDrinkFlavor() {
+        String selectedDrink = "";
+        System.out.println("===Please select drink===");
+        drinks = drinkFlavors;
+        for (int i = 0; i < drinks.size(); i++) {
+            System.out.println((i + 1) + ")" + drinks.get(i));
+        }
+        int inputDrink = scanner.nextInt();
+        scanner.nextLine();
+        selectedDrink = drinks.get(inputDrink - 1);
+        return selectedDrink;
+    }
+
+    private String selectDrinkSize() {
+        String selectedDrinkSize = "";
+        System.out.println("===Please select size===\n1)Small\n2)Medium\n3)Large");
+        int inputDrinkSize = scanner.nextInt();
+        scanner.nextLine();
+        if (inputDrinkSize == 1) {
+            selectedDrinkSize = "Small";
+        } else if (inputDrinkSize == 2) {
+            selectedDrinkSize = "Medium";
+        } else if (inputDrinkSize == 3) {
+            selectedDrinkSize = "Large";
+        }
+        return selectedDrinkSize;
+    }
+
     private void processCheckout() {
         System.out.println("Would you like to checkout? 1)yes / 2)no");
         int inputCheckout = scanner.nextInt();
         scanner.nextLine();
         if (inputCheckout == 1) {
-
-            System.out.println("===CHECKOUT===\nOrder Summary:"); // +  I want to add date and time);
+            if(!order.isValidOrder()) {
+                System.out.println("You are directed to main menu");
+                orderScreen();
+            }
+            System.out.println("===CHECKOUT===\nOrder Summary:\nDate:" + LocalDate.now() + " " + LocalTime.now());
             System.out.println("-----------------------------------------------");
 
             if (inputCheckout == 1) {
