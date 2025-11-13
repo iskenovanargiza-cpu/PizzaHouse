@@ -58,4 +58,8 @@ public class Order {
         }
         return true;
     }
+
+    public void setGarlicKnots(int garlicKnots) {
+        this.garlicKnots = garlicKnots;
+    }
 }

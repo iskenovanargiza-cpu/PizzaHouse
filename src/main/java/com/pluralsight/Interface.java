@@ -68,7 +68,7 @@ public class Interface {
             case 2 -> processAddDrink();
             case 3 -> processAddGarlicKnots();
             case 4 -> processCheckout();
-//            case 0 -> processCancelOrder;
+            case 0 -> processCancelOrder();
             default -> {
                 System.out.println("Invalid number. Returning to the home page screen...");
             }
@@ -285,5 +285,18 @@ public class Interface {
             }
         }
     }
+
+    public void processCancelOrder() {
+        clearAll();
+        System.out.println("Your order has been canceled. Returning to home page...");
+        homeScreen();
+    }
+
+    public void clearAll() {
+        order.getPizzas().clear();
+        drinks.clear();
+        order.setGarlicKnots(0);
+    }
+
 }
 
