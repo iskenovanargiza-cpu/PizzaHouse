@@ -20,6 +20,10 @@ public class Interface {
 
     );
 
+    List<String> premiumCheeseToppings = List.of(
+            "Mozzarella", "Parmesan", "Ricotta", "Goat Cheese", "Buffalo"
+    );
+
     List<String> sauces = List.of(
             "Marinara", "Alfredo", "Pesto", "BBQ", "Buffalo", "Olive oil"
     );
@@ -29,7 +33,6 @@ public class Interface {
     );
 
     List<String> toppings = new ArrayList<>();
-    List<String> pizzaSauces = new ArrayList<>();
     List<String> drinks = new ArrayList<>();
 
     public Interface() {
@@ -90,7 +93,7 @@ public class Interface {
         Topping topping = new Topping(selectedToppingCategory, selectedToppingName, isPremium, isExtra);
         Pizza pizza = new Pizza(selectedSize, selectedType, topping, selectedSauceName, isStuffed);
         order.addPizza(pizza);
-        pizza.getToppings().add(topping);
+        processCheckout();
 
     }
 
@@ -144,7 +147,7 @@ public class Interface {
 
     private String selectSize() {
         String selectedSize = "";
-        System.out.println("===Please select pizza size===\n1)Personal 8'\n2)Medium 12'\n3)Large 16'");
+        System.out.println("===Please select pizza size===\n1)Personal 8\n2)Medium 12\n3)Large 16");
         int inputSize = scanner.nextInt();
         scanner.nextLine();
         if (inputSize == 1) {
@@ -164,14 +167,14 @@ public class Interface {
         scanner.nextLine();
 
         if (inputToppingCategory == 1) {
-            toppings = regularToppings;
             selectedToppingCategory = "regular";
+            toppings = regularToppings;
         } else if (inputToppingCategory == 2) {
             System.out.println("===Please select premium topping===\n1)Meat \n 2)Cheese");
             int inputPremiumSelect = scanner.nextInt();
             if (inputPremiumSelect == 1) {
                 toppings = premiumMeetToppings;
-                selectedToppingCategory = "premiumMeat";
+                selectedToppingCategory = "Premium meat category";
             } else if (inputPremiumSelect == 2) {
                 toppings = premiumCheeseToppings;
                 selectedToppingCategory = "Premium cheese category";
@@ -207,13 +210,11 @@ public class Interface {
     private String selectSauce() {
         String selectedSauceName = "";
         System.out.println("===Please select sauce===");
-        pizzaSauces = sauces;
-        for (int i = 0; i < pizzaSauces.size(); i++) {
-            System.out.println(i + 1 + ")" + pizzaSauces.get(i));
+        for (int i = 0; i < sauces.size(); i++) {
+            System.out.println(i + 1 + ")" + sauces.get(i));
         }
         int inputSauce = scanner.nextInt();
-        scanner.nextLine();
-        selectedSauceName = pizzaSauces.get(inputSauce - 1);
+        selectedSauceName = sauces.get(inputSauce - 1);
         return selectedSauceName;
 
     }
@@ -222,7 +223,6 @@ public class Interface {
         boolean isStuffed = false;
         System.out.print("Would you like the pizza with stuffed crust? 1)yes / 2)no:");
         int inputIfStuffedPizza = scanner.nextInt();
-        scanner.nextLine();
 
         if (inputIfStuffedPizza == 1) {
             isStuffed = true;
@@ -265,7 +265,6 @@ public class Interface {
     private void processCheckout() {
         System.out.println("Would you like to checkout? 1)yes / 2)no");
         int inputCheckout = scanner.nextInt();
-        scanner.nextLine();
         if (inputCheckout == 1) {
             if (!order.isValidOrder()) {
                 System.out.println("You are directed to main menu");
@@ -280,9 +279,10 @@ public class Interface {
                     System.out.println("Crust type: " + firstPizza.getCrustType());
                     System.out.println("Sauce: " + firstPizza.getSauce());
                     System.out.println("Stuffed crust: " + (firstPizza.isStuffed ? "yes" : "no"));
-                    System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " category " + firstPizza.getTopping().getName());
+                    System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " \"" + firstPizza.getTopping().getName() + "\"");
                     System.out.println("Added extra " + firstPizza.getTopping().getName() + " : " + (firstPizza.getTopping().isExtra() ? "yes" : "no"));
                 }
+
             }
             System.out.println("Total amount :" + " " + order.getPizzas().get(0).totalAmount(order.getPizzas().get(0)));
 

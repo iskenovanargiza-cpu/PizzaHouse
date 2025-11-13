@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Pizza {
@@ -9,19 +10,29 @@ public class Pizza {
     private Topping topping;
     private String sauce;
     boolean isStuffed;
-    private List <Topping> toppings;
-    private List<String> pizzaSauces;
+    private List<Topping> toppings;
+    private double priceForExtraMeatTopping = 0.50;
+    private double priceForExtraCheeseTopping = 0.30;
 
+    private HashMap<String, Double> pizzaSizePricesMap = new HashMap<String, Double>() {{
+        put("Personal", 8.50);
+        put("Medium", 12.00);
+        put("Large", 16.50);
+    }};
 
-    public Pizza(String size, String crustType, Topping topping,String sauce, boolean isStuffed) {
+    private HashMap<String, Double> pizzaToppingPricesMap = new HashMap<String, Double>() {{
+        put("regular", 0.00);
+        put("Premium meat category", 1.00);
+        put("Premium cheese category", 0.75);
+    }};
+
+    public Pizza(String size, String crustType, Topping topping, String sauce, boolean isStuffed) {
         this.size = size;
         this.crustType = crustType;
         this.topping = topping;
         this.sauce = sauce;
         this.isStuffed = isStuffed;
         this.toppings = new ArrayList<>();
-        this.pizzaSauces = new ArrayList<>();
-
     }
 
     public double totalAmount(Pizza pizza) {
@@ -82,13 +93,12 @@ public class Pizza {
         return toppings;
 
     }
-    public List<String> getPizzaSauces() {
-        return pizzaSauces;
+
+    public String getSauce() {
+        return sauce;
     }
 
     public Topping getTopping() {
         return topping;
     }
 }
-
-
