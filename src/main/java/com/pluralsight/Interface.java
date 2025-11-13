@@ -15,13 +15,13 @@ public class Interface {
             "Tomatoes", "Spinach", "Basil", "Pineapple", "Anchovies"
     );
 
-    List<String> premiumToppings = List.of(
-            "Pepperoni", "Sausage", "Ham", "Bacon", "Chicken", "Meatball",
-            "Mozzarella", "Parmesan", "Ricotta", "Goat Cheese", "Buffalo"
+    List<String> premiumMeetToppings = List.of(
+            "Pepperoni", "Sausage", "Ham", "Bacon", "Chicken", "Meatball"
+
     );
 
     List<String> sauces = List.of(
-            "marinara", "alfredo", "pesto", "bbq", "buffalo", "olive oil"
+            "Marinara", "Alfredo", "Pesto", "Bbq", "Buffalo", "Olive oil"
     );
 
     List<String> drinkFlavors = List.of(
@@ -167,12 +167,19 @@ public class Interface {
             toppings = regularToppings;
             selectedToppingCategory = "regular";
         } else if (inputToppingCategory == 2) {
-            toppings = premiumToppings;
-            selectedToppingCategory = "premium";
+            System.out.println("===Please select premium topping===\n1)Meat \n 2)Cheese");
+            int inputPremiumSelect = scanner.nextInt();
+            if (inputPremiumSelect == 1) {
+                toppings = premiumMeetToppings;
+                selectedToppingCategory = "premiumMeat";
+            } else if (inputPremiumSelect == 2) {
+                toppings = premiumCheeseToppings;
+                selectedToppingCategory = "premiumCheese";
+            }
         }
         return selectedToppingCategory;
-
     }
+
 
     private String selectTopping() {
         String selectedToppingName = "";
@@ -260,28 +267,37 @@ public class Interface {
         int inputCheckout = scanner.nextInt();
         scanner.nextLine();
         if (inputCheckout == 1) {
-            if(!order.isValidOrder()) {
+            if (!order.isValidOrder()) {
                 System.out.println("You are directed to main menu");
                 orderScreen();
-            }
-            System.out.println("===CHECKOUT===\nOrder Summary:\nDate:" + LocalDate.now() + " " + LocalTime.now());
+            }else if (order.isValidOrder()) {
+            System.out.println("===CHECKOUT===\nOrder summary:\ndate:" + LocalDate.now() + " " + LocalTime.now());
             System.out.println("-----------------------------------------------");
 
-            if (inputCheckout == 1) {
-
                 for (Pizza firstPizza : order.getPizzas()) {
-                    System.out.println(firstPizza.getSize());
-                    System.out.println(firstPizza.getCrustType());
-                    System.out.println(firstPizza.getPizzaSauces());
-                    System.out.println(firstPizza.isStuffed());
-                    for (Topping topping1 : firstPizza.getToppings()) {
-                        System.out.println(topping1.getName());
-                        System.out.println(topping1.getCategory());
-                        System.out.println(topping1.isExtra());
-                        System.out.println();
-                        System.out.println(firstPizza.totalAmount()); // firstPizza.totalAmount()
-                    }
+                    firstPizza.totalAmount(firstPizza);
+                    System.out.println("Size: " + firstPizza.getSize());
+                    System.out.println("Crust type: " + firstPizza.getCrustType());
+                    System.out.println("Sauce:" + firstPizza.getPizzaSauces());
+                    System.out.println("Stuffed crust: " + (firstPizza.isStuffed ? "yes" : "no"));
+                    System.out.println("Topping: " + firstPizza.getTopping().getCategory() + " category " + firstPizza.getTopping().getName());
+                    System.out.println("Added extra " + firstPizza.getTopping().getName() + " : " + (firstPizza.getTopping().isExtra() ? "yes" : "no"));
                 }
+            }
+            System.out.println("Total amount :" + " " + order.getPizzas().get(0).totalAmount(order.getPizzas().get(0)));
+
+
+
+            //confirm or cancel
+            System.out.println("1) Confirm / 2) Cancel");
+            int inputConfirm = scanner.nextInt();
+            if (inputConfirm == 1) {
+                //proceed to save receipt and then return to Home screen with a fresh order.
+
+
+
+            } else if (inputConfirm == 2) {
+                processCancelOrder();
             }
         }
     }

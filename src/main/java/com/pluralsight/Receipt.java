@@ -12,4 +12,6 @@ public class Receipt {
     public void generate(Order order){
 
     }
+
+
 }
