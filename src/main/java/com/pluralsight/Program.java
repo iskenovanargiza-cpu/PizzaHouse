@@ -2,7 +2,7 @@ package com.pluralsight;
 
 public class Program {
     public static void main(String[] args) {
-        Interface ui = new Interface();
+        PizzaHouse ui = new PizzaHouse();
         ui.display();
     }
 }
