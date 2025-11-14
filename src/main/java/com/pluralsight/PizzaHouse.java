@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -121,7 +122,7 @@ public class PizzaHouse {
 
     private void printReceipt() {
         System.out.println("===CHECKOUT===\nOrder summary:\ndate:" + LocalDate.now() + " " + LocalTime.now());
-        System.out.println("-----------------------------------------------");
+        System.out.println("---------------------------");
         double totalPriceForPizzas = 0;
         double totalPriceForDrinks = 0;
 
@@ -143,6 +144,7 @@ public class PizzaHouse {
         }
 
         if (!order.getDrinks().isEmpty()) {
+            System.out.println("---------------------------");
             System.out.println("Drinks");
             for (Drink drink : order.getDrinks()) {
                 System.out.println("-" + drink.getSize() + " " + drink.getFlavor() + ": $" + drink.getPizzaSizePricesMap().get(drink.getSize()));
@@ -152,14 +154,15 @@ public class PizzaHouse {
         }
 
         if (order.getGarlicKnot() != null){
+            System.out.println("---------------------------");
             System.out.println("Garlic Knot");
             System.out.println("Count: " + order.getGarlicKnot().getCount());
             order.setTotalPriceGarlicKnots(order.getGarlicKnot().getPrice() * order.getGarlicKnot().getCount());
-            System.out.println("Subtotal: " + "$" + order.getTotalPriceGarlicKnots());
+            System.out.println("Subtotal: $" + order.getTotalPriceGarlicKnots());
         }
 
         order.setTotalAmount(totalPriceForPizzas + totalPriceForDrinks + order.getTotalPriceGarlicKnots());
-        System.out.println("Total amount: " + (totalPriceForPizzas + totalPriceForDrinks + order.getTotalPriceGarlicKnots()));
+        System.out.println("Total amount: $" + (totalPriceForPizzas + totalPriceForDrinks + order.getTotalPriceGarlicKnots()));
     }
 
     private void confirmOrCancelOrder() {
@@ -179,23 +182,22 @@ public class PizzaHouse {
                             String extraTopping = "extra " + actualPizza.getTopping().getName();
                             writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
                         }
-                        writer.write(String.format("%s:%s|%n", "Subtotal ", order.getTotalPricePizzas()));
+                        writer.write(String.format("%s%s%n", "Subtotal: ", order.getTotalPricePizzas()));
                     }
 
                     if (!order.getDrinks().isEmpty()) {
                         writer.write(String.format("%s:%n", "Drinks"));
                         for (Drink actualDrink : order.getDrinks()) {
-                            writer.write(String.format("%s|%s|%s|%s%n", actualDrink.getSize(), actualDrink.getFlavor(), "Subtotal", order.getTotalPriceDrinks()));
+                            writer.write(String.format("%s|%s|%s%s%n", actualDrink.getSize(), actualDrink.getFlavor(), "Subtotal: ", order.getTotalPriceDrinks()));
                         }
-
                     }
 
                     if (order.getGarlicKnot() != null)  {
-                        writer.write(String.format("%s:%n", "Garlic Knots"));
-                        writer.write(String.format("%s|%s%n", "Count: ", order.getGarlicKnot().getCount()));
-                        writer.write(String.format("%s:%s|%n", "Subtotal", order.getTotalPriceGarlicKnots()));
+                        writer.write(String.format("%s%n", "Garlic Knots: "));
+                        writer.write(String.format("%s%s%n", "Count: ", order.getGarlicKnot().getCount()));
+                        writer.write(String.format("%s%s%n", "Subtotal: ", order.getTotalPriceGarlicKnots()));
                     }
-                    writer.write(String.format("%s:%s%n", "Total amount: ", order.getTotalAmount() ));
+                    writer.write(String.format("%s%s%n", "Total amount: ", order.getTotalAmount() ));
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());

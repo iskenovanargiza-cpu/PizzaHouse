@@ -71,7 +71,7 @@ public class AddPizza {
             selectedToppingCategory = "regular";
             toppings = regularToppings;
         } else if (inputToppingCategory == 2) {
-            System.out.println("===Please select premium topping===\n1)Meat \n 2)Cheese");
+            System.out.println("===Please select premium topping===\n1)Meat\n 2)Cheese");
             int inputPremiumSelect = scanner.nextInt();
             if (inputPremiumSelect == 1) {
                 toppings = premiumMeetToppings;
@@ -83,7 +83,6 @@ public class AddPizza {
         }
         return selectedToppingCategory;
     }
-
 
     public String selectTopping() {
         String selectedToppingName = "";
