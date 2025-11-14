@@ -157,6 +157,9 @@ public class PizzaHouse {
             order.setTotalPriceGarlicKnots(order.getGarlicKnot().getPrice() * order.getGarlicKnot().getCount());
             System.out.println("Subtotal: " + "$" + order.getTotalPriceGarlicKnots());
         }
+
+        order.setTotalAmount(totalPriceForPizzas + totalPriceForDrinks + order.getTotalPriceGarlicKnots());
+        System.out.println("Total amount: " + (totalPriceForPizzas + totalPriceForDrinks + order.getTotalPriceGarlicKnots()));
     }
 
     private void confirmOrCancelOrder() {
@@ -192,6 +195,7 @@ public class PizzaHouse {
                         writer.write(String.format("%s|%s%n", "Count: ", order.getGarlicKnot().getCount()));
                         writer.write(String.format("%s:%s|%n", "Subtotal", order.getTotalPriceGarlicKnots()));
                     }
+                    writer.write(String.format("%s:%s%n", "Total amount: ", order.getTotalAmount() ));
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());

@@ -18,6 +18,7 @@ public class Order {
     private double totalPricePizzas;
     private double totalPriceDrinks;
     private double totalPriceGarlicKnots;
+    private double totalAmount;
     private String receiptFileName;
 
     public Order() {
@@ -95,5 +96,13 @@ public class Order {
 
     public void setTotalPriceGarlicKnots(double totalPriceGarlicKnots) {
         this.totalPriceGarlicKnots = totalPriceGarlicKnots;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }
