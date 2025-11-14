@@ -23,19 +23,20 @@ public class PizzaHouse {
     Order order = new Order();
 
     public void display() {
-        do {
+        boolean running = true;
+        while (running) {
             homeScreen();
 
-            System.out.print("Please select your option here:");
+            System.out.print("Please select your option here: ");
             int userInput = scanner.nextInt();
             scanner.nextLine();
 
             switch (userInput) {
                 case 1 -> orderScreen();
-                case 0 -> System.exit(0);
+                case 0 -> running = false;
                 default -> System.out.println("Invalid number. Please try again...");
             }
-        } while (true);
+        }
     }
 
     public void homeScreen() {
@@ -113,7 +114,9 @@ public class PizzaHouse {
         } else if (userInput == 2) {
             processCheckout();
         } else if (userInput == 3) {
-            processCancelOrder();
+            clearAll();
+            System.out.println("Your order was successfully cancelled");
+            System.exit(0);
         }
     }
 
@@ -128,7 +131,7 @@ public class PizzaHouse {
     }
 
     private void confirmOrCancelOrder() {
-        System.out.println("1) Confirm / 2) Cancel");
+        System.out.println("1) confirm | 2) cancel | 3) go back to main menu ");
         int inputConfirm = scanner.nextInt();
         if (inputConfirm == 1) {
             try {
@@ -136,27 +139,32 @@ public class PizzaHouse {
                 String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
                 Path dir = Paths.get("src/main/resources/receipts");
                 Path filePath = dir.resolve(date + "-" + time);
-
                 try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
                     if (!order.getPizzas().isEmpty()) {
-                        writer.write(String.format("%s|%n", "Pizzas"));
+                        writer.write(String.format("%s:%n", "Pizzas"));
                         for (Pizza actualPizza : order.getPizzas()) {
                             String extraTopping = "extra " + actualPizza.getTopping().getName();
                             writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
                         }
-                        writer.write(String.format("%s:%s|", "Subtotal ", order.getTotalPricePizzas()));
+                        writer.write(String.format("%s:%s|%n", "Subtotal ", order.getTotalPricePizzas()));
                     }
                     if (!order.getDrinks().isEmpty()) {
-                        writer.write(String.format("%s|%n", "Drinks"));
+                        writer.write(String.format("%s:%n", "Drinks"));
                         for (Drink actualDrink : order.getDrinks()) {
                             writer.write(String.format("%s|%s%n", actualDrink.getSize(), actualDrink.getFlavor()));
                         }
-                        writer.write(String.format("%s:%s", "Subtotal", order.getTotalPriceDrinks()));
+                        writer.write(String.format("%s:%s|%n", "Subtotal", order.getTotalPriceDrinks()));
                     }
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
+        } else if (inputConfirm == 2) {
+            clearAll();
+            System.out.println("Your order was successfully cancelled");
+            System.exit(0);
+        } else if(inputConfirm == 3) {
+          return;
         }
     }
 
@@ -167,9 +175,10 @@ public class PizzaHouse {
         double totalPriceForDrinks = 0;
 
         if (!order.getPizzas().isEmpty()) {
-            System.out.println("Pizza");
-
-            for (Pizza pizza : order.getPizzas()) {
+            System.out.println("Pizzas");
+            for (int i = 0; i < order.getPizzas().size(); i++) {
+                Pizza pizza = order.getPizzas().get(i);
+                System.out.println("---Pizza " + (i + 1) + "---");
                 System.out.println("Size: " + pizza.getSize());
                 System.out.println("Crust type: " + pizza.getCrustType());
                 System.out.println("Sauce: " + pizza.getSauce());
