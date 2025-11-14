@@ -1,5 +1,6 @@
 package com.pluralsight;
 import com.pluralsight.drink.Drink;
+import com.pluralsight.garlicKnots.GarlicKnot;
 import com.pluralsight.pizza.Pizza;
 
 import java.time.LocalDate;
@@ -12,10 +13,11 @@ public class Order {
     private LocalTime orderTime;
     private List <Pizza> pizzas;
     private List <Drink> drinks;
-    private int garlicKnots;
+    private GarlicKnot garlicKnot;
     private double totalPrice;
     private double totalPricePizzas;
     private double totalPriceDrinks;
+    private double totalPriceGarlicKnots;
     private String receiptFileName;
 
     public Order() {
@@ -23,7 +25,6 @@ public class Order {
         this.orderTime = LocalTime.now();
         this.pizzas = new ArrayList<Pizza>();
         this.drinks = new ArrayList<Drink>();
-        this.garlicKnots = 0;
         this.totalPrice = 0.00;
         this.receiptFileName = "";
     }
@@ -36,8 +37,8 @@ public class Order {
         this.drinks.add(drink);
     }
 
-    public double addGarlicKnots(int garlicKnots){
-       return garlicKnots * 1.50;
+    public void addGarlicKnot(GarlicKnot garlicKnot){
+        this.garlicKnot = garlicKnot;
     }
 
     public void calculateTotal() {
@@ -57,13 +58,10 @@ public class Order {
     }
 
 
-
-    public int getGarlicKnots() {
-        return garlicKnots;
-    }
-
     public boolean isValidOrder() {
-        if (!pizzas.isEmpty() || !drinks.isEmpty() || garlicKnots > 0) {
+        if (!pizzas.isEmpty()) {
+            return true;
+        } else if (!drinks.isEmpty() || garlicKnot != null) {
             return true;
         } else {
             System.out.println("You must order at least one pizza, drink, or garlic knots");
@@ -71,8 +69,8 @@ public class Order {
         }
     }
 
-    public void setGarlicKnots(int garlicKnots) {
-        this.garlicKnots = garlicKnots;
+    public GarlicKnot getGarlicKnot() {
+        return garlicKnot;
     }
 
     public double getTotalPricePizzas() {
@@ -89,5 +87,13 @@ public class Order {
 
     public void setTotalPriceDrinks(double totalPriceDrinks) {
         this.totalPriceDrinks = totalPriceDrinks;
+    }
+
+    public double getTotalPriceGarlicKnots() {
+        return totalPriceGarlicKnots;
+    }
+
+    public void setTotalPriceGarlicKnots(double totalPriceGarlicKnots) {
+        this.totalPriceGarlicKnots = totalPriceGarlicKnots;
     }
 }

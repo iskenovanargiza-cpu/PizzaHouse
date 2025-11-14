@@ -2,6 +2,8 @@ package com.pluralsight;
 
 import com.pluralsight.drink.AddDrink;
 import com.pluralsight.drink.Drink;
+import com.pluralsight.garlicKnots.AddGarlicKnots;
+import com.pluralsight.garlicKnots.GarlicKnot;
 import com.pluralsight.pizza.AddPizza;
 import com.pluralsight.pizza.Pizza;
 import com.pluralsight.pizza.Topping;
@@ -20,6 +22,7 @@ public class PizzaHouse {
     Scanner scanner = new Scanner(System.in);
     AddPizza addPizza = new AddPizza(scanner);
     AddDrink addDrink = new AddDrink(scanner);
+    AddGarlicKnots addGarlicKnots = new AddGarlicKnots(scanner);
     Order order = new Order();
 
     public void display() {
@@ -85,24 +88,10 @@ public class PizzaHouse {
     }
 
     public void processAddGarlicKnots() {
-        System.out.println("Add garlic knots to your order ? 1)yes / 2)no");
-        int inputAddKnots = scanner.nextInt();
-
-        if (inputAddKnots == 1) {
-            System.out.println("How many would you like to add?");
-            int inputQuantity = scanner.nextInt();
-            order.addGarlicKnots(inputQuantity);
-        } else if (inputAddKnots == 2) {
-            System.out.println("Would you like to process checkout? 1)yes / 2)no");
-            int inputCheckout = scanner.nextInt();
-            if (inputCheckout == 1) {
-                processCheckout();
-
-            } else if (inputCheckout == 2) {
-                System.out.println("You are directed to the main menu...");
-                orderScreen();
-            }
-
+        int countOfAddedNotes = addGarlicKnots.getCountOfAddedGarlicKnots();
+        if (countOfAddedNotes > 0) {
+            order.addGarlicKnot(new GarlicKnot(countOfAddedNotes));
+            addAnotherProduct();
         }
     }
 
@@ -127,44 +116,6 @@ public class PizzaHouse {
         } else {
             printReceipt();
             confirmOrCancelOrder();
-        }
-    }
-
-    private void confirmOrCancelOrder() {
-        System.out.println("1) confirm | 2) cancel | 3) go back to main menu ");
-        int inputConfirm = scanner.nextInt();
-        if (inputConfirm == 1) {
-            try {
-                String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-                String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
-                Path dir = Paths.get("src/main/resources/receipts");
-                Path filePath = dir.resolve(date + "-" + time);
-                try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
-                    if (!order.getPizzas().isEmpty()) {
-                        writer.write(String.format("%s:%n", "Pizzas"));
-                        for (Pizza actualPizza : order.getPizzas()) {
-                            String extraTopping = "extra " + actualPizza.getTopping().getName();
-                            writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
-                        }
-                        writer.write(String.format("%s:%s|%n", "Subtotal ", order.getTotalPricePizzas()));
-                    }
-                    if (!order.getDrinks().isEmpty()) {
-                        writer.write(String.format("%s:%n", "Drinks"));
-                        for (Drink actualDrink : order.getDrinks()) {
-                            writer.write(String.format("%s|%s%n", actualDrink.getSize(), actualDrink.getFlavor()));
-                        }
-                        writer.write(String.format("%s:%s|%n", "Subtotal", order.getTotalPriceDrinks()));
-                    }
-                }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } else if (inputConfirm == 2) {
-            clearAll();
-            System.out.println("Your order was successfully cancelled");
-            System.exit(0);
-        } else if(inputConfirm == 3) {
-          return;
         }
     }
 
@@ -199,6 +150,61 @@ public class PizzaHouse {
             }
             order.setTotalPriceDrinks(totalPriceForDrinks);
         }
+
+        if (order.getGarlicKnot() != null){
+            System.out.println("Garlic Knot");
+            System.out.println("Count: " + order.getGarlicKnot().getCount());
+            order.setTotalPriceGarlicKnots(order.getGarlicKnot().getPrice() * order.getGarlicKnot().getCount());
+            System.out.println("Subtotal: " + "$" + order.getTotalPriceGarlicKnots());
+        }
+    }
+
+    private void confirmOrCancelOrder() {
+        System.out.println("Confirm your order, or cancel or go back to main menu");
+        System.out.println("1) confirm | 2) cancel | 3) go back to main menu ");
+        int inputConfirm = scanner.nextInt();
+        if (inputConfirm == 1) {
+            try {
+                String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+                Path dir = Paths.get("src/main/resources/receipts");
+                Path filePath = dir.resolve(date + "-" + time);
+                try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+                    if (!order.getPizzas().isEmpty()) {
+                        writer.write(String.format("%s:%n", "Pizzas"));
+                        for (Pizza actualPizza : order.getPizzas()) {
+                            String extraTopping = "extra " + actualPizza.getTopping().getName();
+                            writer.write(String.format("%s|%s|%s|%s%n", actualPizza.getSize(), actualPizza.getCrustType(), actualPizza.getTopping().getName(), extraTopping));
+                        }
+                        writer.write(String.format("%s:%s|%n", "Subtotal ", order.getTotalPricePizzas()));
+                    }
+
+                    if (!order.getDrinks().isEmpty()) {
+                        writer.write(String.format("%s:%n", "Drinks"));
+                        for (Drink actualDrink : order.getDrinks()) {
+                            writer.write(String.format("%s|%s|%s|%s%n", actualDrink.getSize(), actualDrink.getFlavor(), "Subtotal", order.getTotalPriceDrinks()));
+                        }
+
+                    }
+
+                    if (order.getGarlicKnot() != null)  {
+                        writer.write(String.format("%s:%n", "Garlic Knots"));
+                        writer.write(String.format("%s|%s%n", "Count: ", order.getGarlicKnot().getCount()));
+                        writer.write(String.format("%s:%s|%n", "Subtotal", order.getTotalPriceGarlicKnots()));
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            System.out.println("Your order was completed, we are working on your order. See you again!");
+            System.exit(0);
+        } else if (inputConfirm == 2) {
+            clearAll();
+            System.out.println("Your order was successfully cancelled");
+            System.exit(0);
+        } else if (inputConfirm == 3) {
+            return;
+        }
     }
 
     public void processCancelOrder() {
@@ -210,8 +216,7 @@ public class PizzaHouse {
     public void clearAll() {
         order.getPizzas().clear();
         order.getDrinks().clear();
-        order.setGarlicKnots(0);
+        order.getGarlicKnot().setCount(0);
     }
-
 }
 
